@@ -27,6 +27,7 @@ export default class root extends Component {
         </div>
       </nav>
       <Switch>
+        
         <Route path='/login'>
           <Login></Login>
         </Route>
