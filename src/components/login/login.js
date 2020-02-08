@@ -7,7 +7,7 @@ export default class login extends Component {
   initForm = {
     email: { value: 'gopal@gmail.com', error: '', valid: true },
     password: { value: '123', error: '', valid: true },
-    valid:false
+    isValid: true
   }
   constructor(props) {
     super(props);
@@ -17,25 +17,33 @@ export default class login extends Component {
   }
 
   submitHandler = (event) => {
-    event.preventDefault()
-    this.initForm  = this.state.formValue
+    event.preventDefault();
     for(var key in this.state.formValue){
-     
-      if(this.state.formValue[key]['value']===''){
-        console.log("-------------------------------",key ,this.initForm[key]['error'])
-        this.initForm[key]['error'] = "This is demo error"
+      if(this.state.formValue[key]['value']==='' && typeof this.state.formValue[key] === 'object'){
+        console.log(typeof this.state.formValue[key]," A")
+        this.initForm[key]['error'] = "This is demo error ==> "+key
         this.initForm[key]['valid']= false;
+        this.initForm['isValid'] = false;
+      }else if(typeof this.state.formValue[key] === 'object'){
+        console.log(typeof this.state.formValue[key]," B")
+        this.initForm[key]['error'] = "";
+        this.initForm[key]['valid']= true;
+        this.initForm['isValid'] = true;
       }
-      // else{
-      //   this.initForm[key]['error'] = " ";
-      //   this.initForm[key]['valid']= true;
-      // }
     }
     this.setState({formValue:this.initForm})
-    console.log("Submit event done", this.state.formValue)
+    console.log("Form value === ", this.state.formValue)
   }
   changehandler = (event) => {
-    this.initForm[event.target.name]['value'] = event.target.value
+    this.initForm[event.target.name]['value'] = event.target.value;
+    if (this.initForm[event.target.name]['value'] === '') {
+      this.initForm[event.target.name]['error'] = "This is demo error ==> " + event.target.name
+      this.initForm[event.target.name]['valid'] = false;
+      this.initForm['isValid'] = false;
+    } else {
+      this.initForm[event.target.name]['error'] = " ";
+      this.initForm[event.target.name]['valid'] = true;
+    }
     this.setState({ formValue: this.initForm })
   }
 
@@ -51,7 +59,8 @@ export default class login extends Component {
             if (!this.state.formValue['email']['valid']) {
               return (
                 <div className="alert alert-danger">{this.state.formValue['email']['error']}</div>
-              )}
+              )
+            }
           })()}
         </div>
         <div className="form-group">
@@ -65,7 +74,8 @@ export default class login extends Component {
             if (!this.state.formValue['password']['valid']) {
               return (
                 <div className="alert alert-danger">Error</div>
-              )}
+              )
+            }
           })()}
 
         </div>
